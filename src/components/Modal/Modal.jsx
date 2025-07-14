@@ -1,13 +1,17 @@
 import React from "react";
 import { useFormik } from "formik";
 import Loader from "../Loader/Loader";
-import axios from "axios";
+// import axios from "axios";
  import { ToastContainer, toast } from 'react-toastify';
+import { myAxios } from "../../lib/myAxios";
 // import { useNavigate } from "react-router-dom";
 
 
-export default function Modal({ handleClose }) {
+
+
+export default function Modal({ handleClose ,getUserdata}) {
   //  const handleClose = props.handleClose;
+
 
   const initialValues = {
     title: "",
@@ -15,20 +19,19 @@ export default function Modal({ handleClose }) {
   };
 
   const addNote = (values, { setSubmitting }) => {
-    axios
-      .post("https://note-sigma-black.vercel.app/api/v1/notes", values,
-        {
-          headers:{
-            token: `3b8ny__${localStorage.getItem("token")}`
-          }
-        }
-
-
-      )
+    myAxios
+      .post("notes", values,
+        // {
+        //   headers:{
+        //     token: `3b8ny__${localStorage.getItem("token")}`
+        //   }
+        // }
+        )
       .then((res) => {
-        console.log(res)
         toast.success("Done for add note");
-        
+        console.log(res)
+        handleClose()
+        getUserdata()
         // navigate('/home')
     
       })
@@ -46,6 +49,7 @@ export default function Modal({ handleClose }) {
     initialValues,
     onSubmit: addNote,
   });
+
 
   return (
     <div className="fixed top-0 right-0 left-0 bottom-0 z-50 bg-black/50 flex justify-center items-center w-full md:inset-0 max-h-full">
