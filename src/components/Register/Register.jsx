@@ -32,7 +32,7 @@ export default function Register() {
       .post("https://note-sigma-black.vercel.app/api/v1/users/signUp", values)
       .then((res) => {
         toast.success("Your account is created successfully");
-        navigate("/login");
+        navigate("/");
       })
       .catch((err) => {
         toast.error(err.response.data.msg);
