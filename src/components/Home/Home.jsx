@@ -5,13 +5,15 @@ import { useState } from "react";
 import { myAxios } from "../../lib/myAxios";
 import Note from "../Note/Note";
 import { useEffect } from "react";
-import { useNotes } from "../../Context/noteContext";
+import { useEditNote, useNotes } from "../../Context/noteContext";
+
 export default function Home() {
   const [showModel, setShowModel] = useState(false);
 
   const [notes, setNotes] = useState([]);
-  
-  const {notesLength, setNotesLength} = useNotes()
+
+  const { notesLength, setNotesLength } = useNotes();
+  const { setEdit } = useEditNote();
 
   const handleOpen = () => {
     setShowModel(true);
@@ -21,6 +23,11 @@ export default function Home() {
     setShowModel(false);
   };
 
+  const handleEdit = () => {
+    setEdit(false);
+    handleOpen();
+  };
+
   const getUserdata = () => {
     myAxios
       .get("notes")
@@ -28,9 +35,8 @@ export default function Home() {
         console.log(res);
         setNotes(res.data.notes);
         setNotesLength(res.data.notes.length);
-        console.log(res.data.notes.length)
+        console.log(res.data.notes.length);
         handleClose();
-      
       })
       .catch((err) => {
         console.log(err);
@@ -51,7 +57,7 @@ export default function Home() {
         <div className="w-4/5 px-5 py-5 ml-auto">
           <div className="text-right mr-2">
             <button
-              onClick={handleOpen}
+              onClick={handleEdit}
               className="bg-cyan-500 text-white px-4 py-2 rounded-md"
             >
               <i className="fa-solid fa-plus"></i> Add Note
@@ -60,7 +66,14 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-3">
             {notes.map((item) => {
-              return <Note key={item._id} note={item} />;
+              return (
+                <Note
+                  key={item._id}
+                  note={item}
+                  getUserdata={getUserdata}
+                  handleOpen={handleOpen}
+                />
+              );
             })}
           </div>
         </div>

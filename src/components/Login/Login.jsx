@@ -4,43 +4,32 @@ import * as yup from "yup";
 
 import Loader from "../Loader/Loader";
 import axios from "axios";
- import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
-
-
-
-
-
-
+import { ToastContainer, toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const validationSchema = yup.object({
-
     email: yup.string().email().required(),
     password: yup.string().min(6).required(),
-
   });
 
   const initialValues = {
-
     email: "",
     password: "",
-
   };
 
   const loginUser = (values, { setSubmitting }) => {
     axios
       .post("https://note-sigma-black.vercel.app/api/v1/users/signIn", values)
       .then((res) => {
-        toast.success("Welocme")
-        localStorage.setItem('token',res.data.token)
-        navigate('/home')
-        console.log({res});
+        toast.success("Welocme");
+        localStorage.setItem("token", res.data.token);
+        navigate("/home");
+        // console.log({ res });
       })
       .catch((err) => {
-        toast.error(err.response.data.msg)
+        toast.error(err.response.data.msg);
         // console.log(err.response.data.msg);
       })
       .finally(() => {
@@ -57,7 +46,6 @@ export default function Login() {
     validationSchema,
     onSubmit: loginUser,
   });
-
 
   return (
     <>
@@ -120,7 +108,12 @@ export default function Login() {
                     )}
                   </button>
                 </form>
-                <p className="mt-3">Don't Have an Account? Register Now</p>
+                <p className="mt-3">
+                  Already Have an Account?{" "}
+                  <Link to="/register" className="text-cyan-500 font-medium">
+                    Register
+                  </Link>
+                </p>
               </div>
             </div>
           </div>

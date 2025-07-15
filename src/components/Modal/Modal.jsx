@@ -2,41 +2,42 @@ import React from "react";
 import { useFormik } from "formik";
 import Loader from "../Loader/Loader";
 // import axios from "axios";
- import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { myAxios } from "../../lib/myAxios";
+import { useEditNote, useNotes } from "../../Context/noteContext";
 // import { useNavigate } from "react-router-dom";
 
-
-
-
-export default function Modal({ handleClose ,getUserdata}) {
+export default function Modal({ handleClose, getUserdata }) {
   //  const handleClose = props.handleClose;
 
+  const { note, edit } = useEditNote();
+  console.log(note);
 
   const initialValues = {
-    title: "",
-    content: "",
+    title: edit ? note.title : "",
+    content: edit ? note.content : "",
   };
 
   const addNote = (values, { setSubmitting }) => {
     myAxios
-      .post("notes", values,
+      .post(
+        "notes",
+        values
         // {
         //   headers:{
         //     token: `3b8ny__${localStorage.getItem("token")}`
         //   }
         // }
-        )
+      )
       .then((res) => {
         toast.success("Done for add note");
-        console.log(res)
-        handleClose()
-        getUserdata()
+        console.log(res);
+        handleClose();
+        getUserdata();
         // navigate('/home')
-    
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         // toast.error(err);
         // console.log(err.response.data.msg);
       })
@@ -45,18 +46,35 @@ export default function Modal({ handleClose ,getUserdata}) {
       });
   };
 
+  const updateNote = (values, { setSubmitting }) => {
+    myAxios
+      .put(`notes/${note._id}`, values)
+      .then((res) => {
+        toast.success("Note is edited");
+        getUserdata();
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      })
+  };
+
   const formik = useFormik({
     initialValues,
-    onSubmit: addNote,
+    onSubmit: edit ? updateNote :addNote
   });
-
 
   return (
     <div className="fixed top-0 right-0 left-0 bottom-0 z-50 bg-black/50 flex justify-center items-center w-full md:inset-0 max-h-full">
       <div className="relative p-4 w-full max-w-2xl max-h-full">
         <div className="relative bg-white rounded-lg shadow-sm">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-900">Add Note</h3>
+            <h3 className="text-xl font-semibold text-gray-900">
+              {edit ? "Update note" : "Add Note"}
+            </h3>
             <button
               onClick={handleClose}
               type="button"
@@ -83,7 +101,8 @@ export default function Modal({ handleClose ,getUserdata}) {
           <form onSubmit={formik.handleSubmit}>
             <div className="p-4 md:p-5 space-y-4">
               <input
-              onChange={formik.handleChange}
+                defaultValue={formik.initialValues.title}
+                onChange={formik.handleChange}
                 className="w-full p-2 my-2 border border-gray-300 rounded"
                 type="text"
                 name="title"
@@ -91,7 +110,8 @@ export default function Modal({ handleClose ,getUserdata}) {
                 placeholder="Note Title"
               />
               <textarea
-              onChange={formik.handleChange}
+                defaultValue={formik.initialValues.content}
+                onChange={formik.handleChange}
                 className="w-full p-2 my-2 border border-gray-300 rounded"
                 type="text"
                 name="content"
@@ -103,20 +123,20 @@ export default function Modal({ handleClose ,getUserdata}) {
             {/* Modal footer */}
             <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
               <button
-              disabled={!formik.values.title || !formik.values.content}
+                disabled={!formik.values.title || !formik.values.content}
                 type="submit"
-                className= "disabled:bg-red-500 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="disabled:bg-red-500 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-
-                          {formik.isSubmitting ? (
-                                      <h2>
-                                        Loading
-                                        <Loader />
-                                      </h2>
-                                    ) : (
-                                      "Add"
-                                    )}
-                
+                {formik.isSubmitting ? (
+                  <h2>
+                    Loading
+                    <Loader />
+                  </h2>
+                ) : edit ? (
+                  "Edit"
+                ) : (
+                  "Add "
+                )}
               </button>
             </div>
           </form>

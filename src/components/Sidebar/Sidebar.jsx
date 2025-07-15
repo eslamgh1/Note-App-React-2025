@@ -4,7 +4,8 @@ export default function Sidebar() {
   return (
     <div className="p-0 min-h-screen bg-gray-900 text-white">
       <ul className="list-none">
-        <li className="p-3 pr-2 hidden lg:flex items-center">
+            {/* <li className="p-3 pr-2 hidden lg:flex items-center"></li> */}
+        <li className="p-3 pr-2 flex items-center">
           <i className="fa-regular fa-note-sticky text-cyan-500 text-2xl"></i>
           <p className="pl-3 text-lg">Notes</p>
         </li>
