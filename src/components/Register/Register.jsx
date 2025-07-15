@@ -1,10 +1,9 @@
 import notesImg from "../../assets/notes1.png";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
 import Loader from "../Loader/Loader";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -34,19 +33,13 @@ export default function Register() {
       .then((res) => {
         toast.success("Your account is created successfully");
         navigate("/login");
-        // console.log(res);
       })
       .catch((err) => {
         toast.error(err.response.data.msg);
-        // console.log(err.response.data.msg);
       })
       .finally(() => {
         setSubmitting(false);
       });
-
-    // helpers.isSubmitting(false)
-    // console.log(values);
-    // console.log(helpers);
   };
 
   const formik = useFormik({
@@ -56,114 +49,178 @@ export default function Register() {
   });
 
   return (
-    <>
-      <li className="fixed top-0 left-0 p-3 pr-5 hidden lg:flex items-center">
-        <i className="fa-regular fa-note-sticky text-cyan-500 text-2xl"></i>
-        <p className="pl-2 text-lg font-bold">Notes</p>
-      </li>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white">
+      {/* Brand Logo */}
+      <div className="fixed top-0 left-0 p-4 hidden lg:flex items-center">
+        <i className="fa-regular fa-note-sticky text-indigo-600 text-3xl"></i>
+        <p className="pl-2 text-xl font-bold text-indigo-800">NotesApp</p>
+      </div>
 
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap">
-          <div className="lg:w-5/12 hidden lg:flex justify-center items-center">
-            <img className="w-full p-5" src={notesImg} alt="Notes" />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-wrap items-center justify-center">
+          {/* Image Section - Hidden on mobile */}
+          <div className="lg:w-1/2 hidden lg:flex justify-center items-center">
+            <div className="max-w-md p-8">
+              <img 
+                className="w-full rounded-lg shadow-xl" 
+                src={notesImg} 
+                alt="Notes" 
+              />
+              <h2 className="text-2xl font-bold text-indigo-900 mt-6">
+                Join Our Community
+              </h2>
+              <p className="text-indigo-700 mt-2">
+                Start organizing your thoughts today.
+              </p>
+            </div>
           </div>
 
-          <div className="lg:w-7/12 w-full flex justify-center items-center min-h-[calc(100vh_-_40px)] text-center">
-            <div className="bg-white bg-opacity-25 shadow-md w-full max-w-md mx-auto p-5 rounded-md">
-              <h1 className="font-bold text-xl">Sign Up Now</h1>
-              <div className="pt-3">
-                <form onSubmit={formik.handleSubmit}>
+          {/* Form Section */}
+          <div className="lg:w-1/2 w-full flex justify-center items-center">
+            <div className="bg-white shadow-xl rounded-xl w-full max-w-md p-6 md:p-8">
+              <div className="text-center mb-6">
+                <h1 className="text-2xl md:text-3xl font-bold text-indigo-900">
+                  Create Your Account
+                </h1>
+                <p className="text-gray-600 mt-2">
+                  Fill in your details to get started
+                </p>
+              </div>
+              
+              <form onSubmit={formik.handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Full Name
+                  </label>
                   <input
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    onKeyUp={formik.handleBlur}
-                    className="w-full p-2 my-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="Enter Your Name"
+                    placeholder="John Doe"
                   />
-                  {formik.touched.name && (
-                    <p className="text-red-700">{formik.errors.name}</p>
+                  {formik.touched.name && formik.errors.name && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {formik.errors.name}
+                    </p>
                   )}
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address
+                  </label>
                   <input
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    onKeyUp={formik.handleBlur}
-                    className="w-full p-2 my-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="email"
                     name="email"
                     id="email"
-                    placeholder="Enter Your Email"
+                    placeholder="your@email.com"
                   />
-                  {formik.touched.email && (
-                    <p className="text-red-700">{formik.errors.email}</p>
+                  {formik.touched.email && formik.errors.email && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {formik.errors.email}
+                    </p>
                   )}
+                </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
                   <input
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    onKeyUp={formik.handleBlur}
-                    className="w-full p-2 my-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Enter Your Password"
+                    placeholder="••••••••"
                   />
-                  {formik.touched.password && (
-                    <p className="text-red-700">{formik.errors.password}</p>
+                  {formik.touched.password && formik.errors.password && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {formik.errors.password}
+                    </p>
                   )}
-                  <input
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    onKeyUp={formik.handleBlur}
-                    className="w-full p-2 my-2 border border-gray-300 rounded"
-                    type="number"
-                    name="age"
-                    id="age"
-                    placeholder="Enter Your Age"
-                  />
-                  {formik.touched.age && (
-                    <p className="text-red-700">{formik.errors.age}</p>
-                  )}
-                  <input
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    onKeyUp={formik.handleBlur}
-                    className="w-full p-2 my-2 border border-gray-300 rounded"
-                    type="text"
-                    name="phone"
-                    id="phone"
-                    placeholder="Enter Your Phone Number"
-                  />
-                  {formik.touched.phone && (
-                    <p className="text-red-700">{formik.errors.phone}</p>
-                  )}
-                  <button
-                    disabled={
-                      !formik.dirty || !formik.isValid || formik.isSubmitting
-                    }
-                    type="submit"
-                    className="bg-cyan-500 text-white w-full rounded-md mt-2 py-2 disabled:bg-red-500"
-                  >
-                    {formik.isSubmitting ? (
-                      <h2>
-                        Loading
-                        <Loader />
-                      </h2>
-                    ) : (
-                      "Sign Up"
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
+                      Age
+                    </label>
+                    <input
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                      type="number"
+                      name="age"
+                      id="age"
+                      placeholder="25"
+                    />
+                    {formik.touched.age && formik.errors.age && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.age}
+                      </p>
                     )}
-                  </button>
-                </form>
-                Already Have an Account?{" "}
-                <Link to="/" className="text-cyan-500 font-medium">
-                  Login
-                </Link>
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      placeholder="01XXXXXXXXX"
+                    />
+                    {formik.touched.phone && formik.errors.phone && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {formik.errors.phone}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
+                  type="submit"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-4"
+                >
+                  {formik.isSubmitting ? (
+                    <span className="flex items-center">
+                      <Loader className="mr-2" />
+                      Creating Account...
+                    </span>
+                  ) : (
+                    "Sign Up"
+                  )}
+                </button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-gray-600">
+                  Already have an account?{" "}
+                  <Link 
+                    to="/login" 
+                    className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline"
+                  >
+                    Sign in
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
