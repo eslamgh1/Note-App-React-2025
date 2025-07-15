@@ -1,4 +1,4 @@
-import notesImg from "../../assets/notes1.png";
+import notesImg from "../../assets/note4.png";
 import { useFormik } from "formik";
 import * as yup from "yup";
 

@@ -2,34 +2,38 @@ import React, { useEffect } from "react";
 import "./Note.css";
 import { myAxios } from "../../lib/myAxios";
 import { useEditNote } from "../../Context/noteContext";
+import { toast } from "react-toastify"; // Add this import at the top
+
 
 
 
 export default function Note({ note, getUserdata, handleOpen }) {
   const { setNote , setEdit} = useEditNote();
 
-  const deleteNote = () => {
-    myAxios
-      .delete(
-        `notes/${note._id}`
-        // {
-        //   headers:{
-        //     token: `3b8ny__${localStorage.getItem("token")}`
-        //   }
-        // }
-      )
-      .then((res) => {
-        // toast.success("Note deleted successfuly");
-        getUserdata();
-
-        // navigate('/home')
-      })
-      .catch((err) => {
-        console.log(err);
-        // toast.error("Failed to delete note");
+const deleteNote = () => {
+  myAxios
+    .delete(`notes/${note._id}`)
+    .then(() => {
+      toast.error("Note deleted", {
+        position: "top-right",
+        autoClose: 1000,        // Show only for 1 second
+        hideProgressBar: true,  // No progress bar
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",       // Makes red background appear
       });
-  };
-
+      getUserdata();
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error("Delete failed", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        theme: "colored",
+      });
+    });
+};
   const handleEdit = () => {
     setNote(note);
     setEdit(true);

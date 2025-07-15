@@ -1,4 +1,4 @@
-import notesImg from "../../assets/notes1.png";
+import notesImg from "../../assets/note4.png";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Loader from "../Loader/Loader";
@@ -210,7 +210,7 @@ export default function Register() {
                 <p className="text-gray-600">
                   Already have an account?{" "}
                   <Link 
-                    to="/login" 
+                    to="/" 
                     className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline"
                   >
                     Sign in
