@@ -14,9 +14,9 @@ export default function Layout() {
             <i className="fas fa-book text-xl"></i>
             <h1 className="text-lg font-semibold">Notes App</h1>
           </div>
-          <div className="bg-white bg-opacity-20 rounded-full px-3 py-1 text-sm font-medium">
-            Notes: {notesLength}
-          </div>
+    <div className="bg-gray-800 bg-opacity-20 rounded-full px-3 py-1 text-sm font-medium">
+  #Notes {notesLength}
+</div>
         </div>
       </header>
 
